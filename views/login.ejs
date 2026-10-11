@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<section class="card narrow">
+  <h1>เข้าสู่ระบบ</h1>
+  <% if (error) { %><div class="flash error" role="alert"><%= error %></div><% } %>
+  <form method="post" action="/login">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>ชื่อผู้ใช้หรืออีเมล
+      <input name="login" required maxlength="120" autocomplete="username">
+    </label>
+    <label>รหัสผ่าน
+      <input type="password" name="password" required maxlength="200" autocomplete="current-password">
+    </label>
+    <button class="btn" type="submit">เข้าสู่ระบบ</button>
+  </form>
+  <p class="muted">ยังไม่มีบัญชี? <a href="/register">สมัครสมาชิก</a></p>
+</section>
+<%- include('partials/footer') %>

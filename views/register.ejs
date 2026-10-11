@@ -1,0 +1,25 @@
+<%- include('partials/header') %>
+<section class="card narrow">
+  <h1>สมัครสมาชิก</h1>
+  <%- include('partials/errors', { errors }) %>
+  <form method="post" action="/register" autocomplete="off">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>ชื่อผู้ใช้
+      <input name="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" value="<%= values.username || '' %>">
+      <small>a-z, 0-9 และ _ ความยาว 3–20 ตัว</small>
+    </label>
+    <label>อีเมล
+      <input type="email" name="email" required maxlength="120" value="<%= values.email || '' %>">
+    </label>
+    <label>รหัสผ่าน
+      <input type="password" name="password" required minlength="8" maxlength="72" autocomplete="new-password">
+      <small>อย่างน้อย 8 ตัว มีทั้งตัวอักษรและตัวเลข</small>
+    </label>
+    <label>ยืนยันรหัสผ่าน
+      <input type="password" name="confirm" required minlength="8" maxlength="72" autocomplete="new-password">
+    </label>
+    <button class="btn" type="submit">สมัครสมาชิก</button>
+  </form>
+  <p class="muted">มีบัญชีแล้ว? <a href="/login">เข้าสู่ระบบ</a></p>
+</section>
+<%- include('partials/footer') %>

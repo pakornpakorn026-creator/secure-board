@@ -1,0 +1,12 @@
+<%- include('partials/header') %>
+<section class="hero">
+  <h1>พื้นที่เล็กๆ สำหรับแลกเปลี่ยนความคิด</h1>
+  <p>เขียนโพสต์ของคุณเอง แก้ไขหรือลบได้เฉพาะของตัวเอง และคอมเมนต์ในโพสต์ของคนอื่น</p>
+  <% if (currentUser) { %>
+    <a class="btn" href="/posts">ไปที่บอร์ด</a>
+  <% } else { %>
+    <a class="btn" href="/register">สมัครสมาชิก</a>
+    <a class="btn ghost" href="/login">เข้าสู่ระบบ</a>
+  <% } %>
+</section>
+<%- include('partials/footer') %>

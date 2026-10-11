@@ -1,0 +1,21 @@
+<%- include('../partials/header') %>
+<div class="row between">
+  <h1><%= title %></h1>
+  <div class="tabs">
+    <a href="/posts" <%- !mine ? 'aria-current="page"' : '' %>>ทั้งหมด</a>
+    <a href="/posts?mine=1" <%- mine ? 'aria-current="page"' : '' %>>ของฉัน</a>
+    <a class="btn small" href="/posts/new">เขียนโพสต์</a>
+  </div>
+</div>
+<% if (!posts.length) { %>
+  <div class="card"><p>ยังไม่มีโพสต์ — <a href="/posts/new">เขียนโพสต์แรกเลย</a></p></div>
+<% } %>
+<% posts.forEach(p => { %>
+  <article class="card post">
+    <h2><a href="/posts/<%= p.id %>"><%= p.title %></a></h2>
+    <p class="excerpt"><%= p.content.length > 160 ? p.content.slice(0, 160) + '…' : p.content %></p>
+    <p class="meta">โดย <strong><%= p.username %></strong> · <%= fmt(p.created_at) %> · <%= p.comment_count %> ความคิดเห็น
+      <% if (p.user_id === currentUser.id) { %><span class="tag">ของฉัน</span><% } %></p>
+  </article>
+<% }) %>
+<%- include('../partials/footer') %>

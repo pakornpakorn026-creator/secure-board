@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> · บอร์ดชุมชน</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="/">บอร์ดชุมชน</a>
+    <nav>
+      <% if (currentUser) { %>
+        <a href="/posts" <%- path === '/posts' ? 'aria-current="page"' : '' %>>บอร์ด</a>
+        <a href="/posts/new">เขียนโพสต์</a>
+        <a href="/profile">โปรไฟล์</a>
+        <% if (currentUser.role === 'admin') { %><a href="/admin">จัดการระบบ</a><% } %>
+        <form method="post" action="/logout" class="inline">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button class="link" type="submit">ออกจากระบบ (<%= currentUser.username %>)</button>
+        </form>
+      <% } else { %>
+        <a href="/login">เข้าสู่ระบบ</a>
+        <a class="btn small" href="/register">สมัครสมาชิก</a>
+      <% } %>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+<% if (flash) { %><div class="flash <%= flash.type %>" role="status"><%= flash.text %></div><% } %>

@@ -1,0 +1,37 @@
+<%- include('partials/header') %>
+<h1>โปรไฟล์ของฉัน</h1>
+<div class="grid2">
+  <section class="card">
+    <h2>ข้อมูลส่วนตัว</h2>
+    <p class="muted">ชื่อผู้ใช้: <strong><%= currentUser.username %></strong> · อีเมล: <%= currentUser.email %> · บทบาท: <%= currentUser.role %></p>
+    <%- include('partials/errors', { errors: profileErrors }) %>
+    <form method="post" action="/profile">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>ชื่อที่แสดง
+        <input name="display_name" maxlength="50" value="<%= currentUser.display_name %>">
+      </label>
+      <label>แนะนำตัว
+        <textarea name="bio" rows="4" maxlength="300"><%= currentUser.bio %></textarea>
+      </label>
+      <button class="btn" type="submit">บันทึกโปรไฟล์</button>
+    </form>
+  </section>
+  <section class="card">
+    <h2>เปลี่ยนรหัสผ่าน</h2>
+    <%- include('partials/errors', { errors: pwErrors }) %>
+    <form method="post" action="/profile/password">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>รหัสผ่านปัจจุบัน
+        <input type="password" name="current" required autocomplete="current-password" maxlength="200">
+      </label>
+      <label>รหัสผ่านใหม่
+        <input type="password" name="password" required minlength="8" maxlength="72" autocomplete="new-password">
+      </label>
+      <label>ยืนยันรหัสผ่านใหม่
+        <input type="password" name="confirm" required minlength="8" maxlength="72" autocomplete="new-password">
+      </label>
+      <button class="btn" type="submit">เปลี่ยนรหัสผ่าน</button>
+    </form>
+  </section>
+</div>
+<%- include('partials/footer') %>

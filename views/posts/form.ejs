@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+<section class="card narrow wide">
+  <h1><%= title %></h1>
+  <%- include('../partials/errors', { errors }) %>
+  <form method="post" action="<%= action %>">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>หัวข้อ
+      <input name="title" required minlength="3" maxlength="100" value="<%= post.title || '' %>">
+    </label>
+    <label>เนื้อหา
+      <textarea name="content" rows="8" required minlength="3" maxlength="2000"><%= post.content || '' %></textarea>
+    </label>
+    <div class="row">
+      <button class="btn" type="submit">บันทึกโพสต์</button>
+      <a class="btn ghost" href="<%= post.id ? '/posts/' + post.id : '/posts' %>">ยกเลิก</a>
+    </div>
+  </form>
+</section>
+<%- include('../partials/footer') %>

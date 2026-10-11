@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+<h1>จัดการระบบ</h1>
+<div class="stats">
+  <div class="card"><strong><%= stats.users %></strong><span>ผู้ใช้ทั้งหมด</span></div>
+  <div class="card"><strong><%= stats.admins %></strong><span>ผู้ดูแลระบบ</span></div>
+  <div class="card"><strong><%= stats.posts %></strong><span>โพสต์</span></div>
+  <div class="card"><strong><%= stats.comments %></strong><span>ความคิดเห็น</span></div>
+</div>
+
+<h2>ผู้ใช้</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>ID</th><th>ชื่อผู้ใช้</th><th>อีเมล</th><th>บทบาท</th><th>โพสต์</th><th>สมัครเมื่อ</th><th>จัดการ</th></tr></thead>
+  <tbody>
+  <% users.forEach(u => { %>
+    <tr>
+      <td><%= u.id %></td>
+      <td><%= u.username %><% if (u.id === currentUser.id) { %> <span class="tag">คุณ</span><% } %></td>
+      <td><%= u.email %></td>
+      <td><%= u.role %></td>
+      <td><%= u.post_count %></td>
+      <td><%= fmt(u.created_at) %></td>
+      <td>
+        <% if (u.id !== currentUser.id) { %>
+          <form method="post" action="/admin/users/<%= u.id %>/role" class="inline">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="hidden" name="role" value="<%= u.role === 'admin' ? 'user' : 'admin' %>">
+            <button class="btn small ghost" type="submit"><%= u.role === 'admin' ? 'ลดเป็น user' : 'เลื่อนเป็น admin' %></button>
+          </form>
+          <form method="post" action="/admin/users/<%= u.id %>/delete" class="inline" data-confirm="ลบผู้ใช้ <%= u.username %> พร้อมโพสต์ทั้งหมด?">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="btn small danger" type="submit">ลบ</button>
+          </form>
+        <% } else { %><span class="muted">—</span><% } %>
+      </td>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>
+</div>
+
+<h2>โพสต์ล่าสุด</h2>
+<div class="scroll">
+<table>
+  <thead><tr><th>ID</th><th>หัวข้อ</th><th>ผู้เขียน</th><th>เมื่อ</th><th></th></tr></thead>
+  <tbody>
+  <% posts.forEach(p => { %>
+    <tr>
+      <td><%= p.id %></td>
+      <td><a href="/posts/<%= p.id %>"><%= p.title %></a></td>
+      <td><%= p.username %></td>
+      <td><%= fmt(p.created_at) %></td>
+      <td>
+        <form method="post" action="/posts/<%= p.id %>/delete" class="inline" data-confirm="ลบโพสต์นี้?">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button class="btn small danger" type="submit">ลบ</button>
+        </form>
+      </td>
+    </tr>
+  <% }) %>
+  <% if (!posts.length) { %><tr><td colspan="5" class="muted">ยังไม่มีโพสต์</td></tr><% } %>
+  </tbody>
+</table>
+</div>
+<%- include('partials/footer') %>

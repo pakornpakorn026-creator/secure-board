@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+<article class="card">
+  <h1><%= post.title %></h1>
+  <p class="meta">โดย <strong><%= post.username %></strong> · <%= fmt(post.created_at) %>
+    <% if (post.updated_at !== post.created_at) { %>(แก้ไข <%= fmt(post.updated_at) %>)<% } %></p>
+  <div class="body"><%= post.content %></div>
+  <% const isOwner = post.user_id === currentUser.id; %>
+  <% if (isOwner || currentUser.role === 'admin') { %>
+    <div class="row actions">
+      <% if (isOwner) { %><a class="btn small ghost" href="/posts/<%= post.id %>/edit">แก้ไข</a><% } %>
+      <form method="post" action="/posts/<%= post.id %>/delete" class="inline" data-confirm="ลบโพสต์นี้ถาวร?">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="btn small danger" type="submit">ลบโพสต์<%= !isOwner ? ' (ผู้ดูแล)' : '' %></button>
+      </form>
+    </div>
+  <% } %>
+</article>
+
+<section id="comments">
+  <h2>ความคิดเห็น (<%= comments.length %>)</h2>
+  <% if (!comments.length) { %><p class="muted">ยังไม่มีความคิดเห็น</p><% } %>
+  <% comments.forEach(c => { %>
+    <div class="card comment">
+      <p class="meta"><strong><%= c.username %></strong> · <%= fmt(c.created_at) %></p>
+      <div class="body"><%= c.content %></div>
+      <% if (c.user_id === currentUser.id || currentUser.role === 'admin') { %>
+        <form method="post" action="/comments/<%= c.id %>/delete" class="inline" data-confirm="ลบความคิดเห็นนี้?">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <button class="link danger-text" type="submit">ลบ</button>
+        </form>
+      <% } %>
+    </div>
+  <% }) %>
+
+  <form method="post" action="/posts/<%= post.id %>/comments" class="card">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>เขียนความคิดเห็น
+      <textarea name="content" rows="3" required maxlength="500"></textarea>
+    </label>
+    <button class="btn" type="submit">ส่งความคิดเห็น</button>
+  </form>
+</section>
+<%- include('../partials/footer') %>
